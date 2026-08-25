@@ -16,15 +16,23 @@ For a substantial design, consider three complementary views:
 
 Do not force all three when one view is sufficient.
 
-## Architecture workflow
+## Token-efficient architecture workflow
 
-1. Identify the decision the diagram supports and the intended reader.
-2. Read `references/architecture-patterns.md` and select a composition.
-3. Use the core `mermaid-design` skill's style and GitHub compatibility guidance.
-4. Group by semantic boundary: system, trust zone, region, account/project, namespace, domain, control/data plane, or ownership.
-5. Show protocols/flows only when they matter to the decision.
-6. For cloud services, use their canonical product names in labels but keep the diagram vendor-icon-free so GitHub Mermaid remains portable.
+1. Identify the decision and intended reader.
+2. Load only the most relevant code shard:
+   - boundaries, regions, layers, contexts -> `../mermaid-design/assets/patterns/architecture-boundaries.md`;
+   - queues, caches, resilience, consistency -> `../mermaid-design/assets/patterns/distributed-systems.md`;
+   - data/ML/RAG platforms -> `../mermaid-design/assets/patterns/data-and-ai-platforms.md`;
+   - agent architecture -> `../mermaid-design/assets/patterns/agent-systems.md`;
+   - security/trust/access -> `../mermaid-design/assets/patterns/security-and-governance.md`;
+   - Kubernetes, delivery, DR -> `../mermaid-design/assets/patterns/delivery-and-operations.md`.
+3. Read `references/architecture-patterns.md` only if the selected code example does not answer the composition question.
+4. Group by real semantic boundary: system, trust zone, region, account/project, namespace, domain, control/data plane, or ownership.
+5. Use `subgraph` to make those boundaries explicit. Do not create decorative subgraphs with no semantic meaning.
+6. Show protocols/flows only when they matter to the decision.
 7. Validate with the Mermaid renderer when available.
+
+Do not load all architecture shards for one task. Most diagrams need exactly one.
 
 ## C4-like discipline without special syntax
 
@@ -37,9 +45,4 @@ Avoid pretending a diagram is a formal C4 model if the syntax/runtime does not s
 
 ## Failure-mode view
 
-Architecture diagrams should expose meaningful resilience behavior when relevant: retries, queues, replicas, failover, DLQ, circuit breakers, cache boundaries, control loops, and human approval gates. Prefer a separate sequence/state diagram over cluttering the topology.
-
-## Supporting material
-
-- `references/architecture-patterns.md` — architecture-specific recipes.
-- Core pattern library: `../mermaid-design/assets/pattern-catalog.md`.
+Expose meaningful resilience behavior when relevant: retries, queues, replicas, failover, DLQ, circuit breakers, cache boundaries, control loops, and human approval gates. Prefer a separate sequence/state diagram over cluttering topology.
