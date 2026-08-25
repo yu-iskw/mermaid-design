@@ -1,129 +1,95 @@
-# Agent Plugin Monorepo Template
+# Mermaid Design
 
-Template repository for building portable [Agent Plugins](https://agent-plugins.org/) with first-class Claude Code compatibility, shared CI/CD, and integration testing.
+Professional Mermaid diagram generation for AI coding agents, packaged as both a Claude Code plugin and an Agent Plugins v1 package.
 
-## Key Features
+The project is inspired by the editorial discipline of [`cathrynlavery/diagram-design`](https://github.com/cathrynlavery/diagram-design), while keeping Mermaid source as the canonical artifact so diagrams remain editable, reviewable, diffable, and directly visualized in GitHub Markdown.
 
-- **Portable Core**: Each plugin has a root `plugin.json`, `skills/`, and optional `mcp.json` following Agent Plugins v1.0.0.
-- **Claude Code Adapter**: Existing `.claude-plugin`, agents, commands, hooks, MCP compatibility, LSP, and marketplace support remain available.
-- **Monorepo Ready**: Host multiple plugins under `plugins/`.
-- **Conformance Checks**: Validate manifest fields, MCP transports, path rules, reserved variables, and component discovery.
-- **Real Claude Installation Tests**: Docker CI adds the repository marketplace, installs each Claude-compatible plugin, and verifies the installation.
+## What it provides
 
-## Architecture
+- **GitHub-first Mermaid output** — every GitHub-facing diagram keeps a fenced `mermaid` source block as the source of truth.
+- **Four Agent Skills** — core design, software architecture, process/behavior, and data/analysis.
+- **Progressive disclosure** — detailed guidance lives in skill `references/` and `assets/` rather than bloating every skill invocation.
+- **150 professional diagram patterns** — architecture, distributed systems, cloud, security, data, agents, CI/CD, lifecycle, modeling, planning, and analytics recipes.
+- **Mermaid CLI validation through MCP** — the bundled MCP configuration uses `@volare-consulting/mermaid-mcp`, which renders with the official `@mermaid-js/mermaid-cli`.
+- **Dual packaging** — Agent Plugins 1.0.0 plus native Claude Code plugin metadata and MCP configuration.
 
-The portable Agent Plugin package is canonical. Client-specific capabilities live in optional adapters and do not modify the portable contract.
+## Repository layout
 
 ```text
-.
-├── .claude-plugin/
-│   └── marketplace.json              # Claude Code distribution catalog
-├── plugins/
-│   └── hello-world/
-│       ├── plugin.json               # Agent Plugins v1 manifest
-│       ├── skills/                   # Portable Agent Skills
-│       ├── mcp.json                  # Portable MCP configuration
-│       ├── .claude-plugin/           # Claude Code adapter manifest
-│       ├── .mcp.json                 # Claude-native MCP compatibility
-│       ├── agents/                   # Claude-specific agents
-│       ├── commands/                 # Claude-specific commands
-│       ├── hooks/                    # Claude-specific hooks
-│       └── .lsp.json                 # Client-specific LSP configuration
-├── integration_tests/
-└── .github/workflows/
+plugins/mermaid-design/
+├── plugin.json                         # Agent Plugins v1 manifest
+├── mcp.json                            # Agent Plugins MCP configuration
+├── .claude-plugin/plugin.json          # Claude Code manifest
+├── .mcp.json                           # Claude Code MCP configuration
+├── README.md
+└── skills/
+    ├── mermaid-design/
+    │   ├── SKILL.md
+    │   ├── references/
+    │   │   ├── diagram-selection.md
+    │   │   ├── github-compatibility.md
+    │   │   └── style-guide.md
+    │   └── assets/
+    │       └── pattern-catalog.md       # 150 reusable patterns
+    ├── software-architecture/
+    ├── process-and-behavior/
+    └── data-and-analysis/
 ```
 
-Agent Plugins v1 intentionally standardizes only Agent Skills and MCP servers. Distribution, installation, permissions, updates, user experience, agents, commands, hooks, and LSP behavior remain client-specific.
+## GitHub rendering contract
 
-## Quickstart
+GitHub embeds Mermaid in Markdown but may run a different Mermaid version from the newest upstream release. Therefore the skills distinguish conservative diagram families from version-sensitive families.
 
-1. Create a repository from this template.
-2. Copy or rename `plugins/hello-world`.
-3. Update both the root portable manifest and the optional Claude marketplace entry.
-4. Run:
+For GitHub deliverables:
 
-```bash
-make lint
-./integration_tests/run.sh --skip-loading
-make test-integration-docker
+1. prefer stable Mermaid syntax;
+2. validate syntax/layout with the MCP renderer when available;
+3. do not assume a successful latest-CLI render proves GitHub support;
+4. fall back to stable `flowchart`, `sequenceDiagram`, `stateDiagram-v2`, `classDiagram`, or `erDiagram` syntax when compatibility is uncertain;
+5. never replace Mermaid source with only a PNG/SVG render.
+
+Example:
+
+````markdown
+```mermaid
+flowchart LR
+  user[User] --> gateway[API Gateway]
+  gateway --> service[Service]
+  service --> db[(Database)]
 ```
+````
 
-## Adding a Plugin
+## Supported diagram families
 
-Create `plugins/<name>/plugin.json`:
+The skills understand Mermaid's broad diagram vocabulary, including flowcharts, swimlanes, sequences, classes, states, ER models, journeys, Gantt, pie, quadrant, Git graph, mind map, timeline, ZenUML, Sankey, XY, block, packet, Kanban, architecture, radar, event modeling, treemap, Venn, Ishikawa, Wardley, Cynefin, tree views, and related examples.
 
-```json
-{
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-  "name": "my-plugin",
-  "version": "0.1.0",
-  "description": "A portable Agent Plugin"
-}
-```
+Some newer families are intentionally treated as **version-sensitive for GitHub** and are translated to stable equivalents when the target GitHub Mermaid version is unknown.
 
-Optional portable components:
+## MCP renderer
 
-- `plugins/<name>/skills/<skill>/SKILL.md`
-- `plugins/<name>/mcp.json`
-
-Optional client adapters:
-
-- `plugins/<name>/.claude-plugin/plugin.json`
-- `plugins/<name>/.cursor-plugin/plugin.json`
-- `plugins/<name>/.codex-plugin/plugin.json`
-
-The integration runner discovers plugins from `plugins/*/plugin.json`. A missing optional component is not an error.
-
-## Portable MCP Rules
-
-`mcp.json` must use the Agent Plugins MCP schema and declare each transport explicitly:
+Portable Agent Plugins configuration:
 
 ```json
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
   "mcpServers": {
-    "example": {
+    "mermaid-renderer": {
       "type": "stdio",
       "command": "npx",
-      "args": ["example-server", "--data", "${PLUGIN_DATA}/state"],
+      "args": ["-y", "@volare-consulting/mermaid-mcp@0.2.0"],
       "cwd": "${PLUGIN_ROOT}"
     }
   }
 }
 ```
 
-Important constraints:
+The renderer requires Node.js/npm and a Chrome/Chromium runtime through Mermaid CLI/Puppeteer. For enterprise or locked-down environments, preinstall and pin dependencies through the organization's approved software supply chain instead of allowing ad-hoc downloads.
 
-- Plugin-relative executable paths begin with `./` and stay inside the plugin root.
-- `command` is one executable token and does not receive placeholder expansion.
-- `${PLUGIN_ROOT}` and `${PLUGIN_DATA}` are expanded only in `args`, `env` values, and `cwd`.
-- Plugins may not override `PLUGIN_ROOT` or `PLUGIN_DATA` in `env`.
-- Non-loopback remote MCP URLs must use HTTPS.
-- Secrets must not be embedded in MCP headers or environment configuration.
+## Design philosophy
 
-## Claude Marketplace
+Mermaid syntax is the implementation detail; communication quality is the product. The skills first decide what question a diagram must answer, then select a proven composition pattern, minimize visual noise, validate semantics, and only then optimize layout.
 
-Agent Plugins does not define a universal marketplace protocol. `.claude-plugin/marketplace.json` remains the Claude Code distribution catalog, while each plugin's root files form the portable package consumed by compatible clients.
-
-## Testing
-
-```bash
-./integration_tests/run.sh
-./integration_tests/run.sh --skip-loading
-./integration_tests/run.sh --manifest-only
-```
-
-The suite validates:
-
-- Agent Plugins root manifests
-- Portable MCP configuration
-- Skills and component discovery
-- Optional Claude, Cursor, and Codex adapters
-- Claude Code loading when the CLI is available
-
-## Specification Version
-
-This template targets Agent Plugins **1.0.0 (Working Draft)**. Canonical schema identifiers are pinned in each portable manifest and MCP configuration. Because clients must select locally supported schemas rather than fetch them while loading a plugin, production client implementations should vendor recognized schemas.
+For architecture documents, prefer a small set of focused views—typically context/topology, runtime sequence, and state/data structure—over a single giant diagram.
 
 ## License
 
