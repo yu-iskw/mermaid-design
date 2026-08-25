@@ -1,22 +1,18 @@
 {
-  "name": "claude-plugin-template",
+  "name": "mermaid-design",
   "metadata": {
-    "description": "Template repository for creating high-quality Claude Code plugins with shared CI/CD and testing infrastructure"
+    "description": "Professional GitHub-renderable Mermaid diagram skills with reusable patterns and MCP validation"
   },
-  "owner": {
-    "name": "yu-iskw"
-  },
+  "owner": { "name": "yu-iskw" },
   "plugins": [
     {
-      "name": "hello-world",
-      "description": "Comprehensive sample plugin demonstrating all Claude Code extension points",
-      "source": "./plugins/hello-world",
-      "version": "1.0.0",
-      "author": {
-        "name": "yu-iskw"
-      },
+      "name": "mermaid-design",
+      "description": "Design professional Mermaid diagrams for GitHub, architecture, processes, and data models.",
+      "source": "./plugins/mermaid-design",
+      "version": "0.1.0",
+      "author": { "name": "yu-iskw" },
       "license": "Apache-2.0",
-      "repository": "https://github.com/yu-iskw/claude-code-plugin-template"
+      "repository": "https://github.com/yu-iskw/mermaid-design"
     }
   ]
 }
