@@ -1,0 +1,11 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "mermaid-renderer": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@volare-consulting/mermaid-mcp@0.2.0"],
+      "cwd": "${PLUGIN_ROOT}"
+    }
+  }
+}
