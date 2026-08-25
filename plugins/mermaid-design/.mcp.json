@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "mermaid-renderer": {
+      "command": "npx",
+      "args": ["-y", "@volare-consulting/mermaid-mcp@0.2.0"]
+    }
+  }
+}
