@@ -1,0 +1,11 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "mermaid-design",
+  "version": "0.1.0",
+  "description": "Design professional, GitHub-renderable Mermaid diagrams using reusable diagram patterns, architecture guidance, and render validation.",
+  "author": { "name": "yu-iskw" },
+  "homepage": "https://github.com/yu-iskw/mermaid-design",
+  "repository": "https://github.com/yu-iskw/mermaid-design",
+  "license": "Apache-2.0",
+  "keywords": ["mermaid", "diagrams", "agent-skills", "agent-plugins", "architecture", "github"]
+}
