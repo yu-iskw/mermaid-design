@@ -1,0 +1,10 @@
+{
+  "name": "mermaid-design",
+  "version": "0.1.0",
+  "description": "Professional diagram design from communication intent, with conservative GitHub Mermaid output.",
+  "author": {
+    "name": "yu-iskw"
+  },
+  "license": "Apache-2.0",
+  "repository": "https://github.com/yu-iskw/mermaid-design"
+}

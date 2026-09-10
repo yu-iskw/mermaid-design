@@ -1,0 +1,13 @@
+sequenceDiagram
+    participant Client
+    participant API
+    participant Policy
+    Client->>API: Request
+    API->>Policy: Authorize
+    alt Allowed
+        Policy-->>API: Permit
+        API-->>Client: Result
+    else Denied
+        Policy-->>API: Deny
+        API-->>Client: Rejected
+    end

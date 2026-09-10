@@ -1,0 +1,6 @@
+stateDiagram-v2
+    [*] --> Pending
+    Pending --> Approved: approve
+    Pending --> Rejected: reject
+    Approved --> [*]
+    Rejected --> [*]

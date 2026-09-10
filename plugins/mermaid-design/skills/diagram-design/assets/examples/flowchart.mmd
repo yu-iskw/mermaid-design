@@ -1,0 +1,6 @@
+flowchart TD
+    request["Request"] --> decision{"Authorized?"}
+    decision -->|Yes| execute["Execute"]
+    decision -->|No| deny["Deny"]
+    execute --> audit["Audit"]
+    deny --> audit
