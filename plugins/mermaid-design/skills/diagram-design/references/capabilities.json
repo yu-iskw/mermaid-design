@@ -1,0 +1,114 @@
+{
+  "profiles": ["github", "mermaid-11", "latest"],
+  "core": [
+    "flowchart",
+    "sequence",
+    "state",
+    "er",
+    "class",
+    "gantt",
+    "timeline",
+    "mindmap",
+    "quadrant",
+    "user-journey",
+    "gitgraph"
+  ],
+  "fallbacks": {
+    "architecture": "Flowchart with subgraphs",
+    "sankey": "Table of source, target, value and unit",
+    "block": "Flowchart or Mindmap",
+    "kanban": "Markdown table",
+    "swimlane": "flowchart",
+    "use-case": "Flowchart",
+    "c4": "Flowchart",
+    "zenuml": "Sequence",
+    "ishikawa": "Causal Flowchart",
+    "treeview": "Mindmap",
+    "event-modeling": "Sequence or Flowchart",
+    "treemap": "Table",
+    "radar": "Table",
+    "xy": "Table",
+    "cynefin": "Quadrant or prose",
+    "venn": "Table or prose",
+    "wardley": "Table",
+    "requirement": "Table",
+    "packet": "Table"
+  },
+  "budgets": {
+    "flowchart": {
+      "recommended": 12,
+      "split": 18,
+      "unit": "nodes"
+    },
+    "sequence": {
+      "recommended": 5,
+      "split": 7,
+      "unit": "actors"
+    },
+    "state": {
+      "recommended": 10,
+      "split": 15,
+      "unit": "states"
+    },
+    "er": {
+      "recommended": 8,
+      "split": 12,
+      "unit": "entities"
+    },
+    "class": {
+      "recommended": 8,
+      "split": 12,
+      "unit": "classes"
+    },
+    "gantt": {
+      "recommended": 15,
+      "split": 25,
+      "unit": "tasks"
+    },
+    "timeline": {
+      "recommended": 12,
+      "split": 18,
+      "unit": "events"
+    },
+    "mindmap": {
+      "recommended": 4,
+      "split": 5,
+      "unit": "levels"
+    },
+    "quadrant": {
+      "recommended": 12,
+      "split": 20,
+      "unit": "items"
+    },
+    "user-journey": {
+      "recommended": 12,
+      "split": 18,
+      "unit": "tasks"
+    },
+    "gitgraph": {
+      "recommended": 12,
+      "split": 18,
+      "unit": "commits"
+    },
+    "architecture": {
+      "recommended": 12,
+      "split": 18,
+      "unit": "services"
+    },
+    "sankey": {
+      "recommended": 10,
+      "split": 15,
+      "unit": "nodes"
+    },
+    "block": {
+      "recommended": 12,
+      "split": 18,
+      "unit": "blocks"
+    },
+    "kanban": {
+      "recommended": 12,
+      "split": 18,
+      "unit": "cards"
+    }
+  }
+}

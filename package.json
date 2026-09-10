@@ -1,0 +1,13 @@
+{
+  "name": "mermaid-design-validation",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs && node scripts/validate-examples.mjs",
+    "validate:mermaid": "node plugins/mermaid-design/skills/diagram-design/scripts/validate-mermaid.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "26.1.0",
+    "mermaid": "11.17.2"
+  }
+}

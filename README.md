@@ -1,130 +1,92 @@
-# Agent Plugin Monorepo Template
+# Mermaid Design
 
-Template repository for building portable [Agent Plugins](https://agent-plugins.org/) with first-class Claude Code compatibility, shared CI/CD, and integration testing.
+A professional diagram-design skill for AI agents, with Mermaid as its GitHub-native
+compiler target. Describe what you want to communicate; the skill selects a semantic
+pattern and visual grammar, resolves renderer capabilities, then reviews the source
+for clarity and complexity.
 
-## Key Features
+## Use
 
-- **Portable Core**: Each plugin has a root `plugin.json`, `skills/`, and optional `mcp.json` following Agent Plugins v1.0.0.
-- **Claude Code Adapter**: Existing `.claude-plugin`, agents, commands, hooks, MCP compatibility, LSP, and marketplace support remain available.
-- **Monorepo Ready**: Host multiple plugins under `plugins/`.
-- **Conformance Checks**: Validate manifest fields, MCP transports, path rules, reserved variables, and component discovery.
-- **Real Claude Installation Tests**: Docker CI adds the repository marketplace, installs each Claude-compatible plugin, and verifies the installation.
+Example requests:
 
-## Architecture
+- “Explain how our agent requests approval before changing a production record.”
+- “Show the migration from our monolith through a transition architecture.”
+- “Help readers understand the bottleneck shared by these producers.”
 
-The portable Agent Plugin package is canonical. Client-specific capabilities live in optional adapters and do not modify the portable contract.
+GitHub is the default target. Unsupported or unverified modern grammars resolve to
+semantic alternatives. The skill can recommend a table or prose when a diagram adds
+no value. It does not invent missing architecture, metrics, schedules or guarantees.
+
+## Installation and portability
+
+Claude Code:
 
 ```text
-.
-├── .claude-plugin/
-│   └── marketplace.json              # Claude Code distribution catalog
-├── plugins/
-│   └── hello-world/
-│       ├── plugin.json               # Agent Plugins v1 manifest
-│       ├── skills/                   # Portable Agent Skills
-│       ├── mcp.json                  # Portable MCP configuration
-│       ├── .claude-plugin/           # Claude Code adapter manifest
-│       ├── .mcp.json                 # Claude-native MCP compatibility
-│       ├── agents/                   # Claude-specific agents
-│       ├── commands/                 # Claude-specific commands
-│       ├── hooks/                    # Claude-specific hooks
-│       └── .lsp.json                 # Client-specific LSP configuration
-├── integration_tests/
-└── .github/workflows/
+/plugin marketplace add yu-iskw/mermaid-design
+/plugin install mermaid-design@claude-plugin-template
 ```
 
-Agent Plugins v1 intentionally standardizes only Agent Skills and MCP servers. Distribution, installation, permissions, updates, user experience, agents, commands, hooks, and LSP behavior remain client-specific.
+The marketplace retains its template identifier for compatibility. The canonical
+portable skill is [plugins/mermaid-design/skills/diagram-design/SKILL.md](plugins/mermaid-design/skills/diagram-design/SKILL.md).
+For an Agent Skills-compatible host, install that complete folder using the host's
+skill installation mechanism. No Node runtime is required to use the instructions.
+The plugin's root `plugin.json` is portable packaging; `.claude-plugin` and
+`.codex-plugin` manifests adapt that same skill. The original hello-world sample
+remains available independently.
 
-## Quickstart
+## Scope
 
-1. Create a repository from this template.
-2. Copy or rename `plugins/hello-world`.
-3. Update both the root portable manifest and the optional Claude marketplace entry.
-4. Run:
+The v0.1 implementation includes one intent-based router, 11 core grammar references,
+12 semantic patterns, five thin domain references, modern fallback guidance, parser
+fixtures and a 50-case evaluation corpus. Architecture, Sankey, Block and Kanban have
+local parser fixtures; Swimlane currently has an ownership-preserving Flowchart
+fallback. Specialized native grammars are deferred as proposed in [RFC #4](https://github.com/yu-iskw/mermaid-design/issues/4).
+
+Typical generation loads one pattern and one resolved grammar reference, plus at
+most one optional domain reference. Compatibility and design references are loaded
+only when needed. A major version or `latest` label alone is not capability evidence.
+
+## Validation
+
+With Node.js 22 or later:
 
 ```bash
-make lint
+npm ci --ignore-scripts
+npm test
+npm run validate:mermaid -- path/to/diagram.mmd
+npm run validate:mermaid -- --profile mermaid-11 path/to/diagram.mmd
 ./integration_tests/run.sh --skip-loading
-make test-integration-docker
 ```
 
-## Adding a Plugin
+Tests parse every bundled `.mmd` fixture and Mermaid code fence, validate relative
+skill links, exercise policy failures, and check evaluation corpus structure.
+The lockfile pins Mermaid 11.17.2 and its validation environment. `mermaid-11` and
+`latest` select local parsing policy; neither certifies the user's remote renderer
+nor installs a different parser. The GitHub profile rejects modern grammars without
+claiming that GitHub cannot ever render them.
 
-Create `plugins/<name>/plugin.json`:
+The validator rejects unknown grammar, configuration directives, HTML, interactive
+links and external icon dependencies. It warns on long quoted labels and measures
+complexity from the pinned parser's graph database for Flowchart, Sequence, ER,
+Class, Architecture, Sankey, Gantt, Timeline, User Journey and GitGraph. State,
+Mindmap, Quadrant, Block and Kanban budgets require manual review. Budget and label
+checks are heuristics, not a security sanitizer or complete Mermaid linter.
 
-```json
-{
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-  "name": "my-plugin",
-  "version": "0.1.0",
-  "description": "A portable Agent Plugin"
-}
-```
+CI runs parsing and policy checks; it does not certify GitHub rendering, layout
+quality, or semantic correctness. [The evaluation protocol](evaluations/README.md)
+tracks the still-pending three-arm blind benchmark. No quality improvement claim
+is made until actual generations and review establish it.
 
-Optional portable components:
+Existing packaging checks remain available through `make lint`, `make format`, and
+`make test-integration-docker`; see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-- `plugins/<name>/skills/<skill>/SKILL.md`
-- `plugins/<name>/mcp.json`
+## Design sources
 
-Optional client adapters:
-
-- `plugins/<name>/.claude-plugin/plugin.json`
-- `plugins/<name>/.cursor-plugin/plugin.json`
-- `plugins/<name>/.codex-plugin/plugin.json`
-
-The integration runner discovers plugins from `plugins/*/plugin.json`. A missing optional component is not an error.
-
-## Portable MCP Rules
-
-`mcp.json` must use the Agent Plugins MCP schema and declare each transport explicitly:
-
-```json
-{
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
-  "mcpServers": {
-    "example": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["example-server", "--data", "${PLUGIN_DATA}/state"],
-      "cwd": "${PLUGIN_ROOT}"
-    }
-  }
-}
-```
-
-Important constraints:
-
-- Plugin-relative executable paths begin with `./` and stay inside the plugin root.
-- `command` is one executable token and does not receive placeholder expansion.
-- `${PLUGIN_ROOT}` and `${PLUGIN_DATA}` are expanded only in `args`, `env` values, and `cwd`.
-- Plugins may not override `PLUGIN_ROOT` or `PLUGIN_DATA` in `env`.
-- Non-loopback remote MCP URLs must use HTTPS.
-- Secrets must not be embedded in MCP headers or environment configuration.
-
-## Claude Marketplace
-
-Agent Plugins does not define a universal marketplace protocol. `.claude-plugin/marketplace.json` remains the Claude Code distribution catalog, while each plugin's root files form the portable package consumed by compatible clients.
-
-## Testing
-
-```bash
-./integration_tests/run.sh
-./integration_tests/run.sh --skip-loading
-./integration_tests/run.sh --manifest-only
-```
-
-The suite validates:
-
-- Agent Plugins root manifests
-- Portable MCP configuration
-- Skills and component discovery
-- Optional Claude, Cursor, and Codex adapters
-- Claude Code loading when the CLI is available
-
-## Specification Version
-
-This template targets Agent Plugins **1.0.0 (Working Draft)**. Canonical schema identifiers are pinned in each portable manifest and MCP configuration. Because clients must select locally supported schemas rather than fetch them while loading a plugin, production client implementations should vendor recognized schemas.
+- [RFC #4](https://github.com/yu-iskw/mermaid-design/issues/4)
+- [Agent Skills specification](https://agentskills.io/specification)
+- [GitHub diagram guidance](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams)
+- [Mermaid documentation](https://mermaid.js.org/intro/)
 
 ## License
 
-Apache License 2.0. See `LICENSE`.
+Apache-2.0; see [LICENSE](LICENSE).
